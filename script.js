@@ -21,6 +21,7 @@ let W = 0, H = 0;
 let hearts = [];
 let teamoParticles = [];
 let teamoAnimating = false;
+let teamoTime = 0;
 let last = performance.now();
 let muted = true;
 
@@ -67,7 +68,7 @@ function spawnHeart(x, y, burst=false){
   }
 }
 
-// TE AMO particle system
+// TE AMO particle system - MEJORADO
 function initTeAmo(){
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const w = window.innerWidth;
@@ -80,80 +81,135 @@ function initTeAmo(){
   teamoCtx.setTransform(dpr,0,0,dpr,0,0);
 
   teamoParticles = [];
+  teamoTime = 0;
   const cx = w / 2;
   const cy = h / 2;
 
-  // Create heart shape outline
+  // Corazón más grande y definido
   const heartPoints = [];
-  const steps = 250;
+  const steps = 400;
+  const heartScale = 14;
   for(let i=0; i<steps; i++){
     const t = (i / steps) * Math.PI * 2;
     const x = 16 * Math.pow(Math.sin(t), 3);
     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-    heartPoints.push({x: cx + x * 10, y: cy + y * 10});
+    heartPoints.push({x: cx + x * heartScale, y: cy + y * heartScale - 30});
   }
 
-  // Create "TE AMO" text particles
-  const textScale = Math.min(2.5, w / 300);
+  // TE AMO con mejor tipografía
+  const scale = Math.min(w / 600, 3.5);
+  const letterSpacing = 70 * scale;
   const text = 'TE AMO';
-  const spacing = 60 * textScale;
-  const startX = cx - (text.length * spacing) / 2 + spacing/2;
-  
-  // Letter patterns (simplified pixel art)
+  const startX = cx - (5 * letterSpacing) / 2; // 5 letras + 1 espacio
+  const textY = cy - 10;
+
+  // Patrones de letras más detallados
   const letters = {
-    'T': [[1,0],[1,1],[1,2],[1,3],[1,4],[0,0],[2,0]],
-    'E': [[0,0],[0,1],[0,2],[0,3],[0,4],[1,0],[2,0],[1,2],[2,2],[1,4],[2,4]],
-    'A': [[0,1],[0,2],[0,3],[0,4],[1,0],[2,0],[1,2],[2,2],[2,1],[2,3],[2,4]],
-    'M': [[0,0],[0,1],[0,2],[0,3],[0,4],[1,1],[2,2],[3,1],[4,0],[4,1],[4,2],[4,3],[4,4]],
-    'O': [[1,0],[2,0],[0,1],[0,2],[0,3],[3,1],[3,2],[3,3],[1,4],[2,4]],
+    'T': [
+      [0,0],[1,0],[2,0],[3,0],[4,0],
+      [2,1],[2,2],[2,3],[2,4],[2,5]
+    ],
+    'E': [
+      [0,0],[1,0],[2,0],[3,0],
+      [0,1],[0,2],[1,2],[2,2],[3,2],
+      [0,3],[0,4],[0,5],
+      [1,5],[2,5],[3,5]
+    ],
+    'A': [
+      [1,0],[2,0],
+      [0,1],[3,1],
+      [0,2],[1,2],[2,2],[3,2],
+      [0,3],[3,3],
+      [0,4],[3,4],
+      [0,5],[3,5]
+    ],
+    'M': [
+      [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],
+      [1,1],[2,2],[3,1],
+      [4,0],[4,1],[4,2],[4,3],[4,4],[4,5]
+    ],
+    'O': [
+      [1,0],[2,0],
+      [0,1],[3,1],
+      [0,2],[3,2],
+      [0,3],[3,3],
+      [0,4],[3,4],
+      [1,5],[2,5]
+    ],
     ' ': []
   };
 
-  // Spawn particles from random positions (they'll fly to form letters)
+  const pixelSize = 12 * scale;
+  const particlesPerPixel = 6;
+
+  // Crear partículas para las letras
   for(let i=0; i<text.length; i++){
     const letter = letters[text[i]];
     if(!letter) continue;
-    const lx = startX + i * spacing;
-    for(let p of letter){
-      for(let dx=0; dx<5; dx++){
-        for(let dy=0; dy<5; dy++){
-          teamoParticles.push({
-            x: rand(0, w),
-            y: rand(0, h),
-            tx: lx + p[0] * 10 * textScale + dx * 2.2,
-            ty: cy + p[1] * 10 * textScale + dy * 2.2,
-            vx: 0,
-            vy: 0,
-            size: rand(2.5, 4),
-            hue: rand(340, 360),
-            alpha: 0,
-            targetAlpha: rand(0.8, 1),
-            phase: rand(0, Math.PI * 2),
-            delay: rand(0, 0.5)
-          });
-        }
+    
+    const letterX = startX + i * letterSpacing;
+    
+    for(let pixel of letter){
+      for(let k=0; k<particlesPerPixel; k++){
+        const tx = letterX + pixel[0] * pixelSize + rand(-2, 2);
+        const ty = textY + pixel[1] * pixelSize + rand(-2, 2);
+        
+        teamoParticles.push({
+          x: rand(0, w),
+          y: rand(-100, h + 100),
+          tx: tx,
+          ty: ty,
+          vx: 0,
+          vy: 0,
+          size: rand(3, 5),
+          hue: rand(345, 360),
+          alpha: 0,
+          targetAlpha: rand(0.85, 1),
+          delay: rand(0, 1.5),
+          settled: false
+        });
       }
     }
   }
 
-  // Add heart outline particles
-  for(let pt of heartPoints){
-    if(Math.random() < 0.4){
+  // Partículas del corazón
+  for(let i=0; i<heartPoints.length; i++){
+    if(Math.random() < 0.5){
+      const pt = heartPoints[i];
       teamoParticles.push({
         x: rand(0, w),
-        y: rand(0, h),
+        y: rand(-100, h + 100),
         tx: pt.x,
         ty: pt.y,
         vx: 0,
         vy: 0,
-        size: rand(2.5, 4.5),
+        size: rand(3.5, 6),
         hue: rand(340, 10),
         alpha: 0,
-        targetAlpha: rand(0.6, 0.95),
-        phase: rand(0, Math.PI * 2),
-        delay: rand(0, 0.8)
+        targetAlpha: rand(0.7, 0.95),
+        delay: rand(0, 2),
+        settled: false
       });
     }
+  }
+
+  // Partículas flotantes de fondo
+  for(let i=0; i<100; i++){
+    teamoParticles.push({
+      x: rand(0, w),
+      y: rand(0, h),
+      tx: rand(0, w),
+      ty: rand(0, h),
+      vx: rand(-0.5, 0.5),
+      vy: rand(-0.5, 0.5),
+      size: rand(1.5, 3),
+      hue: rand(340, 20),
+      alpha: 0,
+      targetAlpha: rand(0.2, 0.5),
+      delay: rand(0, 3),
+      settled: true,
+      floating: true
+    });
   }
 
   teamoAnimating = true;
@@ -162,52 +218,65 @@ function initTeAmo(){
 function animateTeAmo(dt){
   if(!teamoAnimating) return;
 
+  teamoTime += dt;
   const w = teamoCanvas.width / (Math.min(2, window.devicePixelRatio || 1));
   const h = teamoCanvas.height / (Math.min(2, window.devicePixelRatio || 1));
   
-  teamoCtx.fillStyle = 'rgba(7,7,11,0.15)';
+  // Fondo con fade suave
+  teamoCtx.fillStyle = 'rgba(7,7,11,0.12)';
   teamoCtx.fillRect(0, 0, w, h);
 
-  let allSettled = true;
-
   for(let p of teamoParticles){
+    // Delay de entrada
     if(p.delay > 0){
       p.delay -= dt;
-      allSettled = false;
       continue;
     }
 
-    p.phase += dt * 2;
-    const wobble = Math.sin(p.phase) * 1.2;
-    
-    // Attract to target with spring physics
-    const dx = p.tx - p.x;
-    const dy = p.ty - p.y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    
-    if(dist > 2){
-      allSettled = false;
-      p.vx += dx * 0.08;
-      p.vy += dy * 0.08;
+    // Animación de partículas flotantes
+    if(p.floating){
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.x < 0 || p.x > w) p.vx *= -1;
+      if(p.y < 0 || p.y > h) p.vy *= -1;
+    } else {
+      // Física de atracción mejorada
+      const dx = p.tx - p.x;
+      const dy = p.ty - p.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      
+      if(dist > 1){
+        const force = Math.min(dist * 0.12, 15);
+        p.vx += (dx / dist) * force * dt * 60;
+        p.vy += (dy / dist) * force * dt * 60;
+        p.settled = false;
+      } else {
+        p.settled = true;
+      }
+      
+      p.vx *= 0.88;
+      p.vy *= 0.88;
+      
+      p.x += p.vx * dt * 60;
+      p.y += p.vy * dt * 60;
     }
-    
-    p.vx *= 0.92;
-    p.vy *= 0.92;
-    
-    p.x += p.vx * dt * 60;
-    p.y += p.vy * dt * 60;
 
     // Fade in
     if(p.alpha < p.targetAlpha){
-      p.alpha += dt * 1.5;
+      p.alpha += dt * 2;
     }
 
-    const finalX = p.x + wobble;
-    const finalY = p.y + wobble;
+    // Movimiento suave cuando están acomodadas
+    const wobbleX = p.settled ? Math.sin(teamoTime * 2 + p.x * 0.01) * 1 : 0;
+    const wobbleY = p.settled ? Math.cos(teamoTime * 2 + p.y * 0.01) * 1 : 0;
 
-    // Draw with glow
-    teamoCtx.shadowBlur = 12;
-    teamoCtx.shadowColor = `hsla(${p.hue}, 100%, 65%, ${p.alpha * 0.8})`;
+    const finalX = p.x + wobbleX;
+    const finalY = p.y + wobbleY;
+
+    // Dibujar con mejor glow
+    const glowSize = p.floating ? 8 : 15;
+    teamoCtx.shadowBlur = glowSize;
+    teamoCtx.shadowColor = `hsla(${p.hue}, 100%, 60%, ${p.alpha * 0.9})`;
     teamoCtx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.alpha})`;
     teamoCtx.beginPath();
     teamoCtx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
