@@ -1,5 +1,6 @@
 /* ============
    Theme: black & white with romantic red accents
+   San Valentín para mi enfermera favorita
    ============ */
 :root{
   --bg:#07070b;
@@ -18,7 +19,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{height:100%; overflow-x:hidden}
 body{
   margin:0;
   font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -26,7 +27,6 @@ body{
   background: radial-gradient(1200px 650px at 70% 10%, #1b1b25 0%, transparent 60%),
               radial-gradient(900px 550px at 20% 90%, #161622 0%, transparent 60%),
               linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-  overflow-x:hidden;
 }
 
 .bg{position:fixed; inset:0; pointer-events:none; z-index:0}
@@ -41,11 +41,12 @@ body{
 .glow--a{left:-120px; top:40px; background: radial-gradient(circle, #ff2d5535, transparent 60%)}
 .glow--b{right:-140px; bottom:-120px; background: radial-gradient(circle, #ffffff18, transparent 60%)}
 
-#hearts{position:fixed; inset:0; z-index:1}
+#hearts{position:fixed; inset:0; z-index:1; pointer-events:none}
+#teamo{position:absolute; inset:0; z-index:1; pointer-events:none}
 
 .wrap{position:relative; z-index:2; max-width:1040px; margin:0 auto; padding:26px 18px 38px}
 
-.top{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
 .badge{
   display:inline-flex; align-items:center; gap:10px;
   padding:10px 14px;
@@ -88,7 +89,16 @@ body{
   pointer-events:none;
 }
 
-.kicker{margin:0; color:var(--muted2); letter-spacing:.22em; text-transform:uppercase; font-size:12px}
+.hero__teamo{
+  position:absolute;
+  left:50%; top:50%;
+  transform: translate(-50%, -50%);
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+.kicker{margin:0; color:var(--muted2); letter-spacing:.22em; text-transform:uppercase; font-size:12px; position:relative; z-index:2}
 .title{
   margin:10px 0 6px;
   font-family: "Great Vibes", cursive;
@@ -96,10 +106,12 @@ body{
   font-size: clamp(44px, 6vw, 74px);
   line-height:1.02;
   text-shadow: 0 10px 40px rgba(0,0,0,.55);
+  position:relative; z-index:2;
 }
-.subtitle{margin:0; color:var(--muted); max-width: 62ch}
+.subtitle{margin:0; color:var(--muted); max-width: 62ch; position:relative; z-index:2}
+.subtitle strong{color:var(--text)}
 
-.actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px}
+.actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; position:relative; z-index:2}
 .btn{
   border:1px solid var(--stroke);
   border-radius:999px;
@@ -121,7 +133,7 @@ body{
 .btn--ghost{background: rgba(255,255,255,.03)}
 .btn--danger{background: rgba(255,77,109,.14); border-color: rgba(255,77,109,.28)}
 
-.hint{margin-top:14px; color:var(--muted2); font-size:13px}
+.hint{margin-top:14px; color:var(--muted2); font-size:13px; position:relative; z-index:2}
 
 .row{display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px}
 @media (max-width: 860px){.row{grid-template-columns:1fr}}
@@ -136,14 +148,92 @@ body{
   position:relative;
 }
 .card__head h2{margin:0; font-size:18px}
-.card__head p{margin:6px 0 0; color:var(--muted2)}
+.card__head p{margin:6px 0 0; color:var(--muted2); font-size:14px}
 .love{color:var(--accent); font-weight:600}
 
-/* Bouquet */
-.bouquet{height:260px; position:relative; margin-top:10px}
-.bouquet--giant{height:280px}
+/* 3D Tulips */
+.flowers{
+  height:260px;
+  position:relative;
+  margin-top:10px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:8px;
+}
 
-/* Cat */
+.tulip{
+  position:relative;
+  width:70px;
+  height:240px;
+  animation: gentleSway 3.5s ease-in-out infinite;
+}
+.t1{animation-delay:0s}
+.t2{animation-delay:0.4s}
+.t3{animation-delay:0.8s}
+.t4{animation-delay:1.2s}
+.t5{animation-delay:1.6s}
+
+.stem{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:6px;
+  height:140px;
+  background: linear-gradient(180deg, #4a8c5a 0%, #6fb082 50%, #4a8c5a 100%);
+  border-radius:6px;
+  box-shadow: inset -1px 0 3px rgba(0,0,0,.3), 1px 0 2px rgba(255,255,255,.15);
+}
+
+.leaf{
+  position:absolute;
+  width:32px;
+  height:65px;
+  background: linear-gradient(135deg, #5ca36f 0%, #4a8c5a 50%, #3e7a4e 100%);
+  border-radius: 3px 18px 3px 18px;
+  box-shadow: inset -1px -1px 4px rgba(0,0,0,.25), 1px 1px 2px rgba(255,255,255,.12);
+}
+.l1{bottom:45px; left:8px; transform:rotate(-22deg)}
+.l2{bottom:55px; right:8px; transform:rotate(22deg)}
+
+.petal{
+  position:absolute;
+  width:32px;
+  height:48px;
+  background: radial-gradient(ellipse at 40% 30%, #ff6b8a 0%, #ff2d55 40%, #d91e45 100%);
+  border-radius: 45% 45% 20% 20%;
+  box-shadow: 
+    inset -2px -2px 6px rgba(0,0,0,.3),
+    inset 2px 2px 4px rgba(255,255,255,.25),
+    0 4px 12px rgba(255,45,85,.35);
+  bottom:130px;
+  left:50%;
+}
+
+.p1{transform:translateX(-50%) rotate(0deg); z-index:5}
+.p2{transform:translateX(-50%) rotate(36deg) translateY(-3px); z-index:4}
+.p3{transform:translateX(-50%) rotate(72deg) translateY(-6px); z-index:3}
+.p4{transform:translateX(-50%) rotate(-36deg) translateY(-3px); z-index:4}
+.p5{transform:translateX(-50%) rotate(-72deg) translateY(-6px); z-index:3}
+
+.grass{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:18px;
+  background: linear-gradient(180deg, rgba(90,140,100,.4) 0%, rgba(60,100,70,.25) 100%);
+  border-radius: 12px;
+}
+
+@keyframes gentleSway{
+  0%,100%{transform: rotate(0deg) translateX(0)}
+  25%{transform: rotate(1.5deg) translateX(2px)}
+  75%{transform: rotate(-1.5deg) translateX(-2px)}
+}
+
+/* Cat (mantener estilos existentes) */
 .cat{
   height:220px;
   position:relative;
@@ -188,7 +278,6 @@ body{
 .w3{right:12px; transform: rotate(-8deg)}
 .w4{right:12px; top:110px; transform: rotate(8deg)}
 
-/* Kiss animation */
 .kiss{
   position:absolute;
   left:50%;
@@ -199,15 +288,9 @@ body{
   opacity:0;
   pointer-events:none;
 }
-.kiss--1{
-  animation: floatKiss 3s ease-in-out infinite;
-}
-.kiss--2{
-  animation: floatKiss 3s ease-in-out 1s infinite;
-}
-.kiss--3{
-  animation: floatKiss 3s ease-in-out 2s infinite;
-}
+.kiss--1{animation: floatKiss 3s ease-in-out infinite}
+.kiss--2{animation: floatKiss 3s ease-in-out 1s infinite}
+.kiss--3{animation: floatKiss 3s ease-in-out 2s infinite}
 
 @keyframes floatKiss{
   0%{transform: translate(-50%, 0) scale(0.5); opacity:0}
@@ -240,7 +323,6 @@ body{
   animation: wag 2.6s ease-in-out infinite;
 }
 
-/* Speech bubble */
 .speech{
   position:absolute;
   right:-10px;
@@ -289,20 +371,49 @@ body{
   50%{transform: scale(1.15); opacity:0.85}
 }
 
+/* Nurse dedication */
+.dedication{
+  margin-top:14px;
+  padding:20px 24px;
+  border-radius: var(--radius);
+  border:1px solid var(--stroke);
+  background: linear-gradient(135deg, rgba(255,45,85,.08) 0%, rgba(255,255,255,.03) 100%);
+  box-shadow: 0 12px 40px rgba(255,45,85,.12);
+  text-align:center;
+}
+.dedication__icon{
+  font-size:48px;
+  margin-bottom:10px;
+  animation: pulse 2s ease-in-out infinite;
+}
+.dedication__title{
+  margin:0 0 8px;
+  font-size:22px;
+  color:var(--text);
+}
+.dedication__text{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+  max-width:68ch;
+  margin:0 auto;
+}
+
 /* Modal */
 .modal{position:fixed; inset:0; display:none; z-index:6}
 .modal.is-open{display:block}
-.modal__backdrop{position:absolute; inset:0; background: rgba(0,0,0,.62)}
+.modal__backdrop{position:absolute; inset:0; background: rgba(0,0,0,.62); backdrop-filter:blur(4px)}
 
 .letter{
   position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
   width:min(720px, 92vw);
+  max-height:90vh;
+  overflow-y:auto;
   border-radius: 26px;
   border:1px solid rgba(255,255,255,.18);
   background: linear-gradient(180deg, rgba(14,14,22,.98), rgba(10,10,14,.98));
   box-shadow: 0 30px 110px rgba(0,0,0,.68);
   padding:18px 18px 16px;
-  overflow:hidden;
 }
 .letter:before{
   content:"";
@@ -310,6 +421,7 @@ body{
   background: radial-gradient(650px 280px at 10% 0%, rgba(255,45,85,.18), transparent 55%),
               radial-gradient(650px 240px at 100% 0%, rgba(255,255,255,.12), transparent 50%);
   pointer-events:none;
+  border-radius:26px;
 }
 .letter__close{
   position:absolute; top:12px; right:12px;
@@ -320,11 +432,12 @@ body{
   color:var(--text);
   font-size:22px;
   cursor:pointer;
+  z-index:2;
 }
-.letter__title{margin:10px 0 0; font-family:"Great Vibes", cursive; font-weight:400; font-size:48px}
-.letter__text{margin:10px 0 0; color:var(--muted); line-height:1.65}
-.choices{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
-.letter__sign{margin:14px 0 0; color:var(--muted2)}
+.letter__title{margin:10px 0 0; font-family:"Great Vibes", cursive; font-weight:400; font-size:48px; position:relative}
+.letter__text{margin:10px 0 0; color:var(--muted); line-height:1.65; position:relative}
+.choices{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; position:relative}
+.letter__sign{margin:14px 0 0; color:var(--muted2); position:relative}
 .sig{color:var(--text)}
 
 .toast{
@@ -349,9 +462,12 @@ body{
   margin-top: 14px;
   display:flex;
   justify-content:center;
+  align-items:center;
   gap:10px;
   color: var(--muted2);
-  font-size: 12px;
+  font-size: 11px;
+  flex-wrap:wrap;
+  text-align:center;
 }
 .dot{opacity:.6}
 
