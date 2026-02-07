@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -52,7 +52,7 @@
           ❤️ Abrir mi carta
         </button>
         <button id="btn-surprise" class="btn btn--ghost" type="button">
-          ✨ Ver sorpresa especial
+          ✨ Descubre mi sorpresa
         </button>
       </div>
 
@@ -199,11 +199,71 @@
       </article>
     </section>
 
-    <!-- TE AMO Modal -->
-    <section id="teamo-modal" class="teamo-modal" aria-hidden="true" aria-label="Sorpresa TE AMO">
-      <div class="teamo-modal__backdrop" id="teamo-close"></div>
-      <canvas id="teamo" class="teamo-canvas"></canvas>
-      <button class="teamo-modal__close" id="teamo-close-btn" type="button" aria-label="Cerrar">×</button>
+    <!-- Surprise Modal with Kawaii Cats -->
+    <section id="surprise-modal" class="surprise-modal" aria-hidden="true" aria-label="Sorpresa especial">
+      <div class="surprise-modal__backdrop" id="surprise-close"></div>
+      <div class="surprise-content">
+        <button class="surprise-modal__close" id="surprise-close-btn" type="button" aria-label="Cerrar">×</button>
+        
+        <canvas id="surprise-hearts" class="surprise-hearts" aria-hidden="true"></canvas>
+        
+        <h2 class="surprise-title">Para Ti Mi Amor</h2>
+        <p class="surprise-subtitle">En este día especial, todo gira alrededor de ti y nuestro amor</p>
+        
+        <div class="kawaii-cats">
+          <div class="kawaii-cat cat-left">
+            <div class="k-head">
+              <div class="k-ear k-ear-l"></div>
+              <div class="k-ear k-ear-r"></div>
+              <div class="k-face">
+                <div class="k-eye k-eye-l"></div>
+                <div class="k-eye k-eye-r"></div>
+                <div class="k-blush k-blush-l"></div>
+                <div class="k-blush k-blush-r"></div>
+                <div class="k-mouth"></div>
+              </div>
+            </div>
+            <div class="k-body">
+              <div class="k-heart">❤</div>
+            </div>
+            <div class="k-text">Sí</div>
+          </div>
+          
+          <div class="kawaii-cat cat-center">
+            <div class="k-head k-head-small">
+              <div class="k-ear k-ear-l"></div>
+              <div class="k-ear k-ear-r"></div>
+              <div class="k-face">
+                <div class="k-eye k-eye-l"></div>
+                <div class="k-eye k-eye-r"></div>
+                <div class="k-blush k-blush-l"></div>
+                <div class="k-blush k-blush-r"></div>
+                <div class="k-mouth"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="kawaii-cat cat-right">
+            <div class="k-head">
+              <div class="k-ear k-ear-l"></div>
+              <div class="k-ear k-ear-r"></div>
+              <div class="k-ribbon"></div>
+              <div class="k-face">
+                <div class="k-eye k-eye-l"></div>
+                <div class="k-eye k-eye-r"></div>
+                <div class="k-blush k-blush-l"></div>
+                <div class="k-blush k-blush-r"></div>
+                <div class="k-mouth k-mouth-happy"></div>
+              </div>
+            </div>
+            <div class="k-body">
+              <div class="k-paws"></div>
+            </div>
+          </div>
+        </div>
+        
+        <p class="surprise-message">Eres el latido de mi corazón en este San Valentín</p>
+      </div>
     </section>
 
     <!-- Final toast -->

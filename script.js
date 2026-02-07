@@ -2,9 +2,9 @@
 const canvas = document.getElementById('hearts');
 const ctx = canvas.getContext('2d');
 
-const teamoCanvas = document.getElementById('teamo');
-const teamoCtx = teamoCanvas.getContext('2d');
-const teamoModal = document.getElementById('teamo-modal');
+const surpriseModal = document.getElementById('surprise-modal');
+const surpriseCanvas = document.getElementById('surprise-hearts');
+const surpriseCtx = surpriseCanvas ? surpriseCanvas.getContext('2d') : null;
 
 const modal = document.getElementById('modal');
 const btnOpen = document.getElementById('btn-open');
@@ -19,9 +19,8 @@ const muteText = document.getElementById('mute-text');
 
 let W = 0, H = 0;
 let hearts = [];
-let teamoParticles = [];
-let teamoAnimating = false;
-let teamoTime = 0;
+let surpriseHearts = [];
+let surpriseAnimating = false;
 let last = performance.now();
 let muted = true;
 
@@ -38,15 +37,15 @@ resize();
 
 function rand(min,max){return Math.random()*(max-min)+min}
 
-function heartPath(x,y,size){
-  ctx.beginPath();
+function heartPath(context, x, y, size){
+  context.beginPath();
   const topCurveHeight = size * 0.3;
-  ctx.moveTo(x, y + topCurveHeight);
-  ctx.bezierCurveTo(x, y, x - size/2, y, x - size/2, y + topCurveHeight);
-  ctx.bezierCurveTo(x - size/2, y + (size + topCurveHeight)/2, x, y + (size + topCurveHeight)/1.1, x, y + size);
-  ctx.bezierCurveTo(x, y + (size + topCurveHeight)/1.1, x + size/2, y + (size + topCurveHeight)/2, x + size/2, y + topCurveHeight);
-  ctx.bezierCurveTo(x + size/2, y, x, y, x, y + topCurveHeight);
-  ctx.closePath();
+  context.moveTo(x, y + topCurveHeight);
+  context.bezierCurveTo(x, y, x - size/2, y, x - size/2, y + topCurveHeight);
+  context.bezierCurveTo(x - size/2, y + (size + topCurveHeight)/2, x, y + (size + topCurveHeight)/1.1, x, y + size);
+  context.bezierCurveTo(x, y + (size + topCurveHeight)/1.1, x + size/2, y + (size + topCurveHeight)/2, x + size/2, y + topCurveHeight);
+  context.bezierCurveTo(x + size/2, y, x, y, x, y + topCurveHeight);
+  context.closePath();
 }
 
 function spawnHeart(x, y, burst=false){
@@ -68,219 +67,79 @@ function spawnHeart(x, y, burst=false){
   }
 }
 
-// TE AMO particle system - MEJORADO
-function initTeAmo(){
+function spawnSurpriseHeart(w, h){
+  surpriseHearts.push({
+    x: rand(0, w),
+    y: h + 20,
+    vx: rand(-0.8, 0.8),
+    vy: rand(-3, -1.5),
+    size: rand(15, 35),
+    rot: rand(-0.5, 0.5),
+    vr: rand(-0.03, 0.03),
+    life: rand(3, 5),
+    age: 0,
+    hue: rand(330, 10),
+    alpha: rand(0.7, 1)
+  });
+}
+
+function initSurpriseCanvas(){
+  if(!surpriseCanvas) return;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const w = window.innerWidth;
   const h = window.innerHeight;
   
-  teamoCanvas.width = Math.floor(w * dpr);
-  teamoCanvas.height = Math.floor(h * dpr);
-  teamoCanvas.style.width = w + 'px';
-  teamoCanvas.style.height = h + 'px';
-  teamoCtx.setTransform(dpr,0,0,dpr,0,0);
-
-  teamoParticles = [];
-  teamoTime = 0;
-  const cx = w / 2;
-  const cy = h / 2;
-
-  // Corazón más grande y definido
-  const heartPoints = [];
-  const steps = 400;
-  const heartScale = 14;
-  for(let i=0; i<steps; i++){
-    const t = (i / steps) * Math.PI * 2;
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-    heartPoints.push({x: cx + x * heartScale, y: cy + y * heartScale - 30});
-  }
-
-  // TE AMO con mejor tipografía
-  const scale = Math.min(w / 600, 3.5);
-  const letterSpacing = 70 * scale;
-  const text = 'TE AMO';
-  const startX = cx - (5 * letterSpacing) / 2; // 5 letras + 1 espacio
-  const textY = cy - 10;
-
-  // Patrones de letras más detallados
-  const letters = {
-    'T': [
-      [0,0],[1,0],[2,0],[3,0],[4,0],
-      [2,1],[2,2],[2,3],[2,4],[2,5]
-    ],
-    'E': [
-      [0,0],[1,0],[2,0],[3,0],
-      [0,1],[0,2],[1,2],[2,2],[3,2],
-      [0,3],[0,4],[0,5],
-      [1,5],[2,5],[3,5]
-    ],
-    'A': [
-      [1,0],[2,0],
-      [0,1],[3,1],
-      [0,2],[1,2],[2,2],[3,2],
-      [0,3],[3,3],
-      [0,4],[3,4],
-      [0,5],[3,5]
-    ],
-    'M': [
-      [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],
-      [1,1],[2,2],[3,1],
-      [4,0],[4,1],[4,2],[4,3],[4,4],[4,5]
-    ],
-    'O': [
-      [1,0],[2,0],
-      [0,1],[3,1],
-      [0,2],[3,2],
-      [0,3],[3,3],
-      [0,4],[3,4],
-      [1,5],[2,5]
-    ],
-    ' ': []
-  };
-
-  const pixelSize = 12 * scale;
-  const particlesPerPixel = 6;
-
-  // Crear partículas para las letras
-  for(let i=0; i<text.length; i++){
-    const letter = letters[text[i]];
-    if(!letter) continue;
-    
-    const letterX = startX + i * letterSpacing;
-    
-    for(let pixel of letter){
-      for(let k=0; k<particlesPerPixel; k++){
-        const tx = letterX + pixel[0] * pixelSize + rand(-2, 2);
-        const ty = textY + pixel[1] * pixelSize + rand(-2, 2);
-        
-        teamoParticles.push({
-          x: rand(0, w),
-          y: rand(-100, h + 100),
-          tx: tx,
-          ty: ty,
-          vx: 0,
-          vy: 0,
-          size: rand(3, 5),
-          hue: rand(345, 360),
-          alpha: 0,
-          targetAlpha: rand(0.85, 1),
-          delay: rand(0, 1.5),
-          settled: false
-        });
-      }
-    }
-  }
-
-  // Partículas del corazón
-  for(let i=0; i<heartPoints.length; i++){
-    if(Math.random() < 0.5){
-      const pt = heartPoints[i];
-      teamoParticles.push({
-        x: rand(0, w),
-        y: rand(-100, h + 100),
-        tx: pt.x,
-        ty: pt.y,
-        vx: 0,
-        vy: 0,
-        size: rand(3.5, 6),
-        hue: rand(340, 10),
-        alpha: 0,
-        targetAlpha: rand(0.7, 0.95),
-        delay: rand(0, 2),
-        settled: false
-      });
-    }
-  }
-
-  // Partículas flotantes de fondo
-  for(let i=0; i<100; i++){
-    teamoParticles.push({
-      x: rand(0, w),
-      y: rand(0, h),
-      tx: rand(0, w),
-      ty: rand(0, h),
-      vx: rand(-0.5, 0.5),
-      vy: rand(-0.5, 0.5),
-      size: rand(1.5, 3),
-      hue: rand(340, 20),
-      alpha: 0,
-      targetAlpha: rand(0.2, 0.5),
-      delay: rand(0, 3),
-      settled: true,
-      floating: true
-    });
-  }
-
-  teamoAnimating = true;
+  surpriseCanvas.width = Math.floor(w * dpr);
+  surpriseCanvas.height = Math.floor(h * dpr);
+  surpriseCanvas.style.width = w + 'px';
+  surpriseCanvas.style.height = h + 'px';
+  surpriseCtx.setTransform(dpr,0,0,dpr,0,0);
+  
+  surpriseHearts = [];
+  surpriseAnimating = true;
 }
 
-function animateTeAmo(dt){
-  if(!teamoAnimating) return;
-
-  teamoTime += dt;
-  const w = teamoCanvas.width / (Math.min(2, window.devicePixelRatio || 1));
-  const h = teamoCanvas.height / (Math.min(2, window.devicePixelRatio || 1));
+function animateSurpriseHearts(dt){
+  if(!surpriseAnimating || !surpriseCtx) return;
   
-  // Fondo con fade suave
-  teamoCtx.fillStyle = 'rgba(7,7,11,0.12)';
-  teamoCtx.fillRect(0, 0, w, h);
-
-  for(let p of teamoParticles){
-    // Delay de entrada
-    if(p.delay > 0){
-      p.delay -= dt;
-      continue;
+  const w = surpriseCanvas.width / (Math.min(2, window.devicePixelRatio || 1));
+  const h = surpriseCanvas.height / (Math.min(2, window.devicePixelRatio || 1));
+  
+  surpriseCtx.clearRect(0, 0, w, h);
+  
+  // Spawn new hearts
+  if(Math.random() < 0.15){
+    spawnSurpriseHeart(w, h);
+  }
+  
+  for(let i = surpriseHearts.length - 1; i >= 0; i--){
+    const h = surpriseHearts[i];
+    h.age += dt;
+    h.x += h.vx * 60 * dt;
+    h.y += h.vy * 60 * dt;
+    h.vy -= 0.015 * 60 * dt;
+    h.rot += h.vr * 60 * dt;
+    
+    const t = h.age / h.life;
+    const fade = 1 - Math.pow(t, 2);
+    
+    surpriseCtx.save();
+    surpriseCtx.translate(h.x, h.y);
+    surpriseCtx.rotate(h.rot);
+    
+    const grad = surpriseCtx.createRadialGradient(0,0,2, 0,0, h.size*1.3);
+    grad.addColorStop(0, `hsla(${h.hue}, 100%, 70%, ${h.alpha * fade})`);
+    grad.addColorStop(1, `hsla(${h.hue}, 100%, 50%, 0)`);
+    
+    surpriseCtx.fillStyle = grad;
+    heartPath(surpriseCtx, 0, 0, h.size);
+    surpriseCtx.fill();
+    
+    surpriseCtx.restore();
+    
+    if(h.age >= h.life || h.y < -50){
+      surpriseHearts.splice(i, 1);
     }
-
-    // Animación de partículas flotantes
-    if(p.floating){
-      p.x += p.vx;
-      p.y += p.vy;
-      if(p.x < 0 || p.x > w) p.vx *= -1;
-      if(p.y < 0 || p.y > h) p.vy *= -1;
-    } else {
-      // Física de atracción mejorada
-      const dx = p.tx - p.x;
-      const dy = p.ty - p.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      
-      if(dist > 1){
-        const force = Math.min(dist * 0.12, 15);
-        p.vx += (dx / dist) * force * dt * 60;
-        p.vy += (dy / dist) * force * dt * 60;
-        p.settled = false;
-      } else {
-        p.settled = true;
-      }
-      
-      p.vx *= 0.88;
-      p.vy *= 0.88;
-      
-      p.x += p.vx * dt * 60;
-      p.y += p.vy * dt * 60;
-    }
-
-    // Fade in
-    if(p.alpha < p.targetAlpha){
-      p.alpha += dt * 2;
-    }
-
-    // Movimiento suave cuando están acomodadas
-    const wobbleX = p.settled ? Math.sin(teamoTime * 2 + p.x * 0.01) * 1 : 0;
-    const wobbleY = p.settled ? Math.cos(teamoTime * 2 + p.y * 0.01) * 1 : 0;
-
-    const finalX = p.x + wobbleX;
-    const finalY = p.y + wobbleY;
-
-    // Dibujar con mejor glow
-    const glowSize = p.floating ? 8 : 15;
-    teamoCtx.shadowBlur = glowSize;
-    teamoCtx.shadowColor = `hsla(${p.hue}, 100%, 60%, ${p.alpha * 0.9})`;
-    teamoCtx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.alpha})`;
-    teamoCtx.beginPath();
-    teamoCtx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
-    teamoCtx.fill();
   }
 }
 
@@ -315,7 +174,7 @@ function tick(now){
     grad.addColorStop(1, `hsla(${h.hue}, 95%, 45%, 0)`);
 
     ctx.fillStyle = grad;
-    heartPath(0,0,h.size);
+    heartPath(ctx, 0,0,h.size);
     ctx.fill();
 
     ctx.restore();
@@ -324,10 +183,10 @@ function tick(now){
       hearts.splice(i,1);
     }
   }
-
-  // TE AMO animation
-  if(teamoAnimating){
-    animateTeAmo(dt);
+  
+  // Surprise hearts animation
+  if(surpriseAnimating){
+    animateSurpriseHearts(dt);
   }
 
   requestAnimationFrame(tick);
@@ -345,25 +204,25 @@ function closeModal(){
   modal.setAttribute('aria-hidden','true');
 }
 
-function openTeAmoModal(){
-  teamoModal.classList.add('is-open');
-  teamoModal.setAttribute('aria-hidden','false');
-  initTeAmo();
+function openSurpriseModal(){
+  surpriseModal.classList.add('is-open');
+  surpriseModal.setAttribute('aria-hidden','false');
+  initSurpriseCanvas();
   spawnHeart(window.innerWidth*0.5, window.innerHeight*0.5, true);
 }
 
-function closeTeAmoModal(){
-  teamoModal.classList.remove('is-open');
-  teamoModal.setAttribute('aria-hidden','true');
-  teamoAnimating = false;
-  teamoParticles = [];
+function closeSurpriseModal(){
+  surpriseModal.classList.remove('is-open');
+  surpriseModal.setAttribute('aria-hidden','true');
+  surpriseAnimating = false;
+  surpriseHearts = [];
 }
 
 btnOpen.addEventListener('click', openModal);
-btnSurprise.addEventListener('click', openTeAmoModal);
+btnSurprise.addEventListener('click', openSurpriseModal);
 
-document.getElementById('teamo-close').addEventListener('click', closeTeAmoModal);
-document.getElementById('teamo-close-btn').addEventListener('click', closeTeAmoModal);
+document.getElementById('surprise-close').addEventListener('click', closeSurpriseModal);
+document.getElementById('surprise-close-btn').addEventListener('click', closeSurpriseModal);
 
 modal.addEventListener('click', (e) => {
   if(e.target.matches('[data-close]')) closeModal();
@@ -372,7 +231,7 @@ modal.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if(e.key === 'Escape'){
     closeModal();
-    closeTeAmoModal();
+    closeSurpriseModal();
   }
 });
 
@@ -410,7 +269,7 @@ btnNo.addEventListener('click', () => {
 });
 
 window.addEventListener('pointerdown', (e) => {
-  if(modal.classList.contains('is-open') || teamoModal.classList.contains('is-open')) return;
+  if(modal.classList.contains('is-open') || surpriseModal.classList.contains('is-open')) return;
   spawnHeart(e.clientX, e.clientY, true);
 });
 

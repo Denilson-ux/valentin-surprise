@@ -223,7 +223,7 @@ body{
   75%{transform: rotate(-1.5deg) translateX(-2px)}
 }
 
-/* Cat (mantener estilos existentes) */
+/* Cat */
 .cat{
   height:220px;
   position:relative;
@@ -361,28 +361,34 @@ body{
   50%{transform: scale(1.15); opacity:0.85}
 }
 
-/* TE AMO Modal */
-.teamo-modal{
+/* Surprise Modal with Kawaii Cats */
+.surprise-modal{
   position:fixed;
   inset:0;
   z-index:10;
   display:none;
+  background: rgba(7,7,11,0.97);
 }
-.teamo-modal.is-open{display:block}
-.teamo-modal__backdrop{
+.surprise-modal.is-open{display:flex; align-items:center; justify-content:center}
+.surprise-modal__backdrop{
   position:absolute;
   inset:0;
-  background: rgba(7,7,11,0.95);
-  backdrop-filter: blur(8px);
   cursor:pointer;
 }
-.teamo-canvas{
+.surprise-hearts{
   position:absolute;
   inset:0;
-  width:100%;
-  height:100%;
+  pointer-events:none;
 }
-.teamo-modal__close{
+.surprise-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  max-width:900px;
+  padding:40px 20px;
+  animation: fadeInScale 0.6s ease-out;
+}
+.surprise-modal__close{
   position:absolute;
   top:20px;
   right:20px;
@@ -397,9 +403,233 @@ body{
   z-index:11;
   transition: transform .2s ease, background .2s ease;
 }
-.teamo-modal__close:hover{
+.surprise-modal__close:hover{
   transform: scale(1.1);
   background: rgba(255,255,255,.12);
+}
+
+.surprise-title{
+  font-family: 'Pacifico', cursive;
+  font-size: clamp(48px, 8vw, 86px);
+  color: transparent;
+  background: linear-gradient(135deg, #ff2d55 0%, #ff6b8a 50%, #ff4d6d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  margin:0 0 16px;
+  text-shadow: 0 8px 32px rgba(255,45,85,.45);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.surprise-subtitle{
+  font-size:18px;
+  color:var(--muted);
+  margin:0 0 50px;
+  max-width:70ch;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* Kawaii Cats */
+.kawaii-cats{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:clamp(30px, 5vw, 80px);
+  margin:0 0 40px;
+  flex-wrap:wrap;
+}
+
+.kawaii-cat{
+  position:relative;
+  animation: floatCat 3s ease-in-out infinite;
+}
+.cat-left{animation-delay:0s}
+.cat-center{animation-delay:0.8s}
+.cat-right{animation-delay:1.6s}
+
+.k-head{
+  position:relative;
+  width:140px;
+  height:140px;
+  background: linear-gradient(180deg, #e8f4ff 0%, #d4e8f7 100%);
+  border-radius:50% 50% 45% 45%;
+  border:3px solid rgba(255,255,255,.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+}
+.k-head-small{
+  width:100px;
+  height:100px;
+}
+
+.k-ear{
+  position:absolute;
+  top:-15px;
+  width:35px;
+  height:50px;
+  background: linear-gradient(135deg, #e8f4ff 0%, #c5dff0 100%);
+  border:3px solid rgba(255,255,255,.3);
+  border-radius:50% 50% 20% 20%;
+}
+.k-ear-l{left:15px; transform:rotate(-25deg)}
+.k-ear-r{right:15px; transform:rotate(25deg)}
+.k-ear:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  background: linear-gradient(135deg, #ffc0dd 0%, #ffaac8 100%);
+  border-radius:50% 50% 20% 20%;
+}
+
+.k-ribbon{
+  position:absolute;
+  top:-5px;
+  right:25px;
+  width:28px;
+  height:28px;
+  background: linear-gradient(135deg, #ff2d55 0%, #ff4d6d 100%);
+  border-radius:50%;
+  box-shadow: 0 4px 12px rgba(255,45,85,.4);
+}
+.k-ribbon:before{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width:12px;
+  height:12px;
+  background:#fff;
+  border-radius:50%;
+}
+
+.k-face{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width:100%;
+  height:100%;
+}
+
+.k-eye{
+  position:absolute;
+  top:45px;
+  width:12px;
+  height:18px;
+  background:#2d2d3a;
+  border-radius:50%;
+}
+.k-eye-l{left:35px}
+.k-eye-r{right:35px}
+.k-eye:after{
+  content:"";
+  position:absolute;
+  top:4px;
+  left:3px;
+  width:4px;
+  height:4px;
+  background:#fff;
+  border-radius:50%;
+}
+.k-head-small .k-eye-l{left:25px}
+.k-head-small .k-eye-r{right:25px}
+
+.k-blush{
+  position:absolute;
+  top:60px;
+  width:22px;
+  height:12px;
+  background: linear-gradient(135deg, rgba(255,140,160,.5), rgba(255,140,160,.3));
+  border-radius:50%;
+}
+.k-blush-l{left:18px}
+.k-blush-r{right:18px}
+
+.k-mouth{
+  position:absolute;
+  top:75px;
+  left:50%;
+  transform:translateX(-50%);
+  width:8px;
+  height:8px;
+  border:3px solid #2d2d3a;
+  border-top:none;
+  border-radius:0 0 50% 50%;
+}
+.k-mouth-happy{
+  width:30px;
+  height:15px;
+  border:3px solid #2d2d3a;
+  border-top:none;
+  border-radius:0 0 50% 50%;
+}
+
+.k-body{
+  margin-top:-10px;
+  width:140px;
+  height:80px;
+  background: linear-gradient(180deg, #e8f4ff 0%, #d4e8f7 100%);
+  border:3px solid rgba(255,255,255,.3);
+  border-radius:50% 50% 50% 50%;
+  position:relative;
+  box-shadow: 0 15px 45px rgba(0,0,0,.25);
+}
+.k-head-small + .k-body{
+  display:none;
+}
+
+.k-heart{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:28px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.k-text{
+  margin-top:8px;
+  font-size:32px;
+  font-weight:700;
+  color:#2d2d3a;
+  text-shadow: 0 4px 12px rgba(255,45,85,.3);
+}
+
+.k-paws{
+  position:absolute;
+  bottom:-5px;
+  left:50%;
+  transform:translateX(-50%);
+  width:60px;
+  height:20px;
+}
+
+.surprise-message{
+  font-size:20px;
+  font-weight:600;
+  color:var(--muted);
+  margin:0;
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+@keyframes fadeInScale{
+  from{opacity:0; transform:scale(0.9)}
+  to{opacity:1; transform:scale(1)}
+}
+
+@keyframes floatCat{
+  0%,100%{transform:translateY(0px)}
+  50%{transform:translateY(-15px)}
+}
+
+@keyframes glowPulse{
+  0%,100%{text-shadow: 0 8px 32px rgba(255,45,85,.45)}
+  50%{text-shadow: 0 8px 40px rgba(255,45,85,.7), 0 0 60px rgba(255,45,85,.4)}
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 /* Nurse dedication */
