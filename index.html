@@ -65,19 +65,92 @@
       <article class="card">
         <div class="card__head">
           <h2>Un ramo para ti</h2>
-          <p>Flores blancas para tu amor, y un toque rojo por mi corazón.</p>
+          <p>Rosas rojas (amor), lirios blancos (ternura) y gypsophila (para siempre).</p>
         </div>
+
+        <!-- Stylized bouquet (SVG) -->
         <div class="bouquet" aria-hidden="true">
-          <div class="stem s1"></div><div class="stem s2"></div><div class="stem s3"></div>
-          <div class="flower f1"></div><div class="flower f2"></div><div class="flower f3"></div><div class="flower f4"></div>
-          <div class="ribbon"></div>
+          <svg class="bouquet-svg" viewBox="0 0 420 260" width="100%" height="100%">
+            <defs>
+              <linearGradient id="stem" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#d9dbe8"/>
+                <stop offset="1" stop-color="#7a8096"/>
+              </linearGradient>
+              <radialGradient id="petalWhite" cx="35%" cy="30%" r="70%">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset="1" stop-color="#cfd3e7"/>
+              </radialGradient>
+              <radialGradient id="petalRed" cx="35%" cy="30%" r="70%">
+                <stop offset="0" stop-color="#ff7a93"/>
+                <stop offset="1" stop-color="#ff2d55"/>
+              </radialGradient>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="b"/>
+                <feMerge>
+                  <feMergeNode in="b"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Stems -->
+            <g opacity="0.95">
+              <rect x="145" y="95" width="10" height="150" rx="6" fill="url(#stem)" transform="rotate(-12 150 95)"/>
+              <rect x="200" y="85" width="10" height="160" rx="6" fill="url(#stem)" transform="rotate(-3 205 85)"/>
+              <rect x="258" y="92" width="10" height="152" rx="6" fill="url(#stem)" transform="rotate(10 263 92)"/>
+            </g>
+
+            <!-- Baby breath dots -->
+            <g class="sparkles" filter="url(#soft)" opacity="0.95">
+              <circle cx="140" cy="70" r="6" fill="#ffffff" opacity="0.85"/>
+              <circle cx="168" cy="56" r="5" fill="#ffffff" opacity="0.75"/>
+              <circle cx="198" cy="66" r="6" fill="#ffffff" opacity="0.80"/>
+              <circle cx="232" cy="54" r="5" fill="#ffffff" opacity="0.72"/>
+              <circle cx="270" cy="72" r="6" fill="#ffffff" opacity="0.82"/>
+              <circle cx="292" cy="88" r="5" fill="#ffffff" opacity="0.70"/>
+            </g>
+
+            <!-- White lilies (stylized) -->
+            <g class="lilies" filter="url(#soft)">
+              <g transform="translate(150 78) rotate(8)">
+                <path d="M0,28 C18,8 36,8 54,28 C36,18 18,18 0,28Z" fill="url(#petalWhite)"/>
+                <path d="M12,38 C24,14 30,14 42,38 C30,30 24,30 12,38Z" fill="url(#petalWhite)" opacity="0.95"/>
+              </g>
+              <g transform="translate(210 70) rotate(-10)">
+                <path d="M0,28 C18,8 36,8 54,28 C36,18 18,18 0,28Z" fill="url(#petalWhite)"/>
+                <path d="M12,38 C24,14 30,14 42,38 C30,30 24,30 12,38Z" fill="url(#petalWhite)" opacity="0.95"/>
+              </g>
+              <g transform="translate(260 86) rotate(14)">
+                <path d="M0,28 C18,8 36,8 54,28 C36,18 18,18 0,28Z" fill="url(#petalWhite)"/>
+                <path d="M12,38 C24,14 30,14 42,38 C30,30 24,30 12,38Z" fill="url(#petalWhite)" opacity="0.95"/>
+              </g>
+            </g>
+
+            <!-- Red roses -->
+            <g class="roses" filter="url(#soft)">
+              <g transform="translate(116 104)">
+                <circle cx="22" cy="22" r="22" fill="url(#petalRed)"/>
+                <path d="M10,22 C16,10 28,10 34,22 C28,18 16,18 10,22Z" fill="#fff" opacity="0.18"/>
+              </g>
+              <g transform="translate(288 112)">
+                <circle cx="22" cy="22" r="22" fill="url(#petalRed)"/>
+                <path d="M10,22 C16,10 28,10 34,22 C28,18 16,18 10,22Z" fill="#fff" opacity="0.18"/>
+              </g>
+            </g>
+
+            <!-- Ribbon -->
+            <g class="ribbon" transform="translate(210 215)">
+              <path d="M-64,10 C-44,-20 -18,-20 0,2 C18,-20 44,-20 64,10 C40,16 22,22 0,34 C-22,22 -40,16 -64,10Z" fill="#ff2d55" opacity="0.98"/>
+              <path d="M-18,6 C-8,0 8,0 18,6 C8,10 -8,10 -18,6Z" fill="#ff6f88" opacity="0.55"/>
+            </g>
+          </svg>
         </div>
       </article>
 
       <article class="card cat-card">
         <div class="card__head">
           <h2>Tu gatito negro</h2>
-          <p>Porque sé que te encantan: elegante, misterioso… como tu magia.</p>
+          <p>Te manda un besito… y te dice: <span class="love">“Te amo, mi amor”</span>.</p>
         </div>
         <div class="cat" aria-hidden="true">
           <div class="cat__ears">
@@ -89,6 +162,7 @@
             <span class="eye eye--r"></span>
             <span class="nose"></span>
             <span class="mouth"></span>
+            <span class="kiss" title="muah" aria-hidden="true">❤</span>
             <span class="whisk w1"></span>
             <span class="whisk w2"></span>
             <span class="whisk w3"></span>
@@ -98,6 +172,7 @@
             <span class="heart-paw" title="Te amo" aria-hidden="true">❤</span>
           </div>
           <div class="tail"></div>
+          <div class="speech" aria-hidden="true">Te amo, mi amor</div>
         </div>
       </article>
     </section>
