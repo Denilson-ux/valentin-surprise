@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <title>Para mi princesita — San Valentín</title>
+  <meta name="description" content="Un detalle romántico para Jhovana: carta, corazones, gatito negro y flores. Hecho con amor." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Ambient background -->
+  <div class="bg" aria-hidden="true">
+    <div class="grain"></div>
+    <div class="vignette"></div>
+    <div class="glow glow--a"></div>
+    <div class="glow glow--b"></div>
+  </div>
+
+  <!-- Heart particles canvas -->
+  <canvas id="hearts" aria-hidden="true"></canvas>
+
+  <!-- Main UI -->
+  <main class="wrap">
+    <header class="top">
+      <div class="badge" title="Hecho con amor">
+        <span class="badge__dot" aria-hidden="true"></span>
+        <span>Para Jhovana</span>
+      </div>
+
+      <button id="btn-mute" class="icon-btn" type="button" aria-label="Activar o silenciar música">
+        <span class="icon" aria-hidden="true">♪</span>
+        <span class="icon-btn__text" id="mute-text">Música: OFF</span>
+      </button>
+    </header>
+
+    <section class="hero" aria-label="Tarjeta principal">
+      <p class="kicker">San Valentín • Un detalle de</p>
+      <h1 class="title">Mi princesita, mi amor, mi todo</h1>
+      <p class="subtitle">
+        Jhovana Rodríguez Aramayo: hoy quiero que el mundo sepa que tú eres mi lugar favorito.
+      </p>
+
+      <div class="actions">
+        <button id="btn-open" class="btn btn--primary" type="button">
+          Abrir mi carta
+        </button>
+        <button id="btn-surprise" class="btn btn--ghost" type="button">
+          Ver sorpresa
+        </button>
+      </div>
+
+      <div class="hint" role="note">
+        Tip: toca/clic en el fondo para lanzar corazones.
+      </div>
+    </section>
+
+    <!-- Surprise row -->
+    <section class="row" aria-label="Sorpresa">
+      <article class="card">
+        <div class="card__head">
+          <h2>Un ramo para ti</h2>
+          <p>Flores blancas para tu amor, y un toque rojo por mi corazón.</p>
+        </div>
+        <div class="bouquet" aria-hidden="true">
+          <div class="stem s1"></div><div class="stem s2"></div><div class="stem s3"></div>
+          <div class="flower f1"></div><div class="flower f2"></div><div class="flower f3"></div><div class="flower f4"></div>
+          <div class="ribbon"></div>
+        </div>
+      </article>
+
+      <article class="card cat-card">
+        <div class="card__head">
+          <h2>Tu gatito negro</h2>
+          <p>Porque sé que te encantan: elegante, misterioso… como tu magia.</p>
+        </div>
+        <div class="cat" aria-hidden="true">
+          <div class="cat__ears">
+            <span class="ear ear--l"></span>
+            <span class="ear ear--r"></span>
+          </div>
+          <div class="cat__head">
+            <span class="eye eye--l"></span>
+            <span class="eye eye--r"></span>
+            <span class="nose"></span>
+            <span class="mouth"></span>
+            <span class="whisk w1"></span>
+            <span class="whisk w2"></span>
+            <span class="whisk w3"></span>
+            <span class="whisk w4"></span>
+          </div>
+          <div class="cat__body">
+            <span class="heart-paw" title="Te amo" aria-hidden="true">❤</span>
+          </div>
+          <div class="tail"></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Letter modal -->
+    <section id="modal" class="modal" aria-hidden="true" aria-label="Carta">
+      <div class="modal__backdrop" data-close></div>
+      <article class="letter" role="dialog" aria-modal="true" aria-labelledby="letter-title">
+        <button class="letter__close" type="button" data-close aria-label="Cerrar">×</button>
+
+        <h2 id="letter-title" class="letter__title">Para ti, mi amor</h2>
+        <p class="letter__text">
+          Mi princesita…
+          <br><br>
+          No necesito un día especial para amarte, pero sí necesito un día para recordarte lo especial que eres.
+          Tú eres mi paz cuando el mundo corre, mi sonrisa cuando el día pesa y mi todo cuando todo falta.
+          <br><br>
+          Gracias por existir, por tu forma de querer, por tu mirada, por tu corazón. Prometo seguir eligiéndote,
+          cuidarte y sorprenderte, una y otra vez.
+          <br><br>
+          ¿Me haces el honor de ser mi San Valentín hoy, mañana y siempre?
+        </p>
+
+        <div class="choices" aria-label="Respuesta">
+          <button id="btn-yes" class="btn btn--primary" type="button">Sí, mi amor</button>
+          <button id="btn-no" class="btn btn--danger" type="button">No (mentirita)</button>
+        </div>
+
+        <p class="letter__sign">
+          Con amor infinito,<br>
+          <span class="sig">Tu enamorado</span>
+        </p>
+      </article>
+    </section>
+
+    <!-- Final toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <footer class="foot">
+      <span>Hecho con HTML + CSS + JS</span>
+      <span class="dot" aria-hidden="true">•</span>
+      <span>Negro & blanco, con amor</span>
+    </footer>
+  </main>
+
+  <!-- Audio (optional): user can replace with a local file) -->
+  <audio id="bgm" preload="none" loop>
+    <!--
+      Coloca un archivo en /audio/humbe.mp3 y descomenta la línea:
+      <source src="audio/humbe.mp3" type="audio/mpeg" />
+    -->
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
