@@ -54,7 +54,7 @@ body{
   background: rgba(255,255,255,.04);
   backdrop-filter: blur(10px);
 }
-.badge__dot{width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 22px var(--accent)}
+.badge__dot{width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 22px var(--accent); animation: beatDot 1.2s ease-in-out infinite}
 
 .icon-btn{
   display:inline-flex; align-items:center; gap:10px;
@@ -137,46 +137,11 @@ body{
 }
 .card__head h2{margin:0; font-size:18px}
 .card__head p{margin:6px 0 0; color:var(--muted2)}
+.love{color:var(--accent); font-weight:600}
 
 /* Bouquet */
-.bouquet{height:220px; position:relative; margin-top:10px}
-.stem{position:absolute; bottom:22px; width:8px; height:150px; background: linear-gradient(180deg,#d7d9e5,#7c8196); border-radius:8px}
-.s1{left:34%; transform: rotate(-10deg)}
-.s2{left:50%; transform: rotate(2deg)}
-.s3{left:66%; transform: rotate(12deg)}
-.flower{
-  position:absolute; width:62px; height:62px;
-  border-radius: 18px;
-  background: radial-gradient(circle at 35% 30%, #fff, #cfd3e7);
-  border:1px solid rgba(255,255,255,.35);
-  box-shadow: 0 14px 32px rgba(255,255,255,.12);
-}
-.f1{left:24%; top:22px; transform: rotate(12deg)}
-.f2{left:42%; top:10px; transform: rotate(-12deg)}
-.f3{left:56%; top:18px; transform: rotate(8deg)}
-.f4{left:68%; top:34px; transform: rotate(-4deg)}
-.flower:before{
-  content:"";
-  position:absolute; inset:12px;
-  border-radius: 14px;
-  background: radial-gradient(circle at 35% 30%, #fff, #ecefff);
-  opacity:.95;
-}
-.ribbon{
-  position:absolute; left:50%; bottom:8px; transform: translateX(-50%);
-  width:120px; height:60px;
-  background: radial-gradient(circle at 30% 30%, #ff4d6d, #ff2d55);
-  border-radius: 24px;
-  filter: drop-shadow(0 18px 30px rgba(255,45,85,.18));
-}
-.ribbon:before,.ribbon:after{
-  content:"";
-  position:absolute; top:18px; width:48px; height:30px;
-  background: radial-gradient(circle at 30% 30%, #ff4d6d, #ff2d55);
-  border-radius: 18px;
-}
-.ribbon:before{left:-26px; transform: rotate(-18deg)}
-.ribbon:after{right:-26px; transform: rotate(18deg)}
+.bouquet{height:260px; position:relative; margin-top:10px}
+.bouquet--giant{height:280px}
 
 /* Cat */
 .cat{
@@ -194,8 +159,9 @@ body{
   border:1px solid rgba(255,255,255,.18);
   border-radius: 10px 10px 18px 18px;
   transform: rotate(10deg);
+  animation: wiggleEar 3.2s ease-in-out infinite;
 }
-.ear--l{transform: rotate(-10deg)}
+.ear--l{transform: rotate(-10deg); animation-delay: 0.2s}
 .ear:before{
   content:"";
   position:absolute; inset:12px;
@@ -210,9 +176,9 @@ body{
   position:relative;
   box-shadow: 0 24px 70px rgba(0,0,0,.5);
 }
-.eye{position:absolute; top:58px; width:26px; height:18px; border-radius: 14px; background:#f2f2f8; opacity:.92}
+.eye{position:absolute; top:58px; width:26px; height:18px; border-radius: 14px; background:#f2f2f8; opacity:.92; animation: blink 4.5s ease-in-out infinite}
 .eye--l{left:56px}
-.eye--r{right:56px}
+.eye--r{right:56px; animation-delay: 0.1s}
 .eye:after{content:""; position:absolute; left:10px; top:4px; width:7px; height:7px; border-radius:50%; background:#0b0b0f}
 .nose{position:absolute; left:50%; top:88px; transform:translateX(-50%); width:16px; height:12px; border-radius: 0 0 10px 10px; background: rgba(255,45,85,.9)}
 .mouth{position:absolute; left:50%; top:102px; transform:translateX(-50%); width:34px; height:18px; border-bottom:2px solid rgba(255,255,255,.38); border-radius: 0 0 18px 18px; opacity:.9}
@@ -221,6 +187,34 @@ body{
 .w2{left:12px; top:110px; transform: rotate(-8deg)}
 .w3{right:12px; transform: rotate(-8deg)}
 .w4{right:12px; top:110px; transform: rotate(8deg)}
+
+/* Kiss animation */
+.kiss{
+  position:absolute;
+  left:50%;
+  top:75px;
+  font-size:16px;
+  color:var(--accent);
+  text-shadow: 0 0 18px rgba(255,45,85,.55);
+  opacity:0;
+  pointer-events:none;
+}
+.kiss--1{
+  animation: floatKiss 3s ease-in-out infinite;
+}
+.kiss--2{
+  animation: floatKiss 3s ease-in-out 1s infinite;
+}
+.kiss--3{
+  animation: floatKiss 3s ease-in-out 2s infinite;
+}
+
+@keyframes floatKiss{
+  0%{transform: translate(-50%, 0) scale(0.5); opacity:0}
+  10%{opacity:0.95}
+  50%{transform: translate(-50%, -50px) scale(1); opacity:0.85}
+  100%{transform: translate(-50%, -90px) scale(0.7); opacity:0}
+}
 
 .cat__body{
   position:absolute; bottom:0;
@@ -246,8 +240,54 @@ body{
   animation: wag 2.6s ease-in-out infinite;
 }
 
+/* Speech bubble */
+.speech{
+  position:absolute;
+  right:-10px;
+  top:20px;
+  background: linear-gradient(135deg, rgba(255,45,85,.95), rgba(255,77,109,.88));
+  padding:10px 14px;
+  border-radius: 18px;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow: 0 14px 40px rgba(255,45,85,.35);
+  animation: floatBubble 2.8s ease-in-out infinite;
+}
+.speech:before{
+  content:"";
+  position:absolute;
+  left:-8px;
+  top:50%;
+  transform: translateY(-50%);
+  width:0;
+  height:0;
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+  border-right:10px solid rgba(255,45,85,.9);
+}
+.speech__text{
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+  white-space:nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+@keyframes floatBubble{
+  0%,100%{transform: translateY(0px)}
+  50%{transform: translateY(-8px)}
+}
+
 @keyframes wag{0%,100%{transform: rotate(6deg)}50%{transform: rotate(-10deg)}}
 @keyframes pulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.18)}}
+@keyframes wiggleEar{0%,100%{transform: rotate(-10deg)}50%{transform: rotate(-14deg)}}
+@keyframes blink{
+  0%,48%,52%,100%{height:18px}
+  50%{height:2px}
+}
+@keyframes beatDot{
+  0%,100%{transform: scale(1); opacity:1}
+  50%{transform: scale(1.15); opacity:0.85}
+}
 
 /* Modal */
 .modal{position:fixed; inset:0; display:none; z-index:6}
