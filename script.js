@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 
 const teamoCanvas = document.getElementById('teamo');
 const teamoCtx = teamoCanvas.getContext('2d');
+const teamoModal = document.getElementById('teamo-modal');
 
 const modal = document.getElementById('modal');
 const btnOpen = document.getElementById('btn-open');
@@ -19,6 +20,7 @@ const muteText = document.getElementById('mute-text');
 let W = 0, H = 0;
 let hearts = [];
 let teamoParticles = [];
+let teamoAnimating = false;
 let last = performance.now();
 let muted = true;
 
@@ -29,18 +31,6 @@ function resize(){
   canvas.style.width = window.innerWidth + 'px';
   canvas.style.height = window.innerHeight + 'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
-
-  // TE AMO canvas (only in hero section)
-  const hero = document.querySelector('.hero');
-  if(hero){
-    const rect = hero.getBoundingClientRect();
-    teamoCanvas.width = Math.floor(rect.width * dpr);
-    teamoCanvas.height = Math.floor(rect.height * dpr);
-    teamoCanvas.style.width = rect.width + 'px';
-    teamoCanvas.style.height = rect.height + 'px';
-    teamoCtx.setTransform(dpr,0,0,dpr,0,0);
-    initTeAmo();
-  }
 }
 window.addEventListener('resize', resize);
 resize();
@@ -79,28 +69,34 @@ function spawnHeart(x, y, burst=false){
 
 // TE AMO particle system
 function initTeAmo(){
-  teamoParticles = [];
-  const hero = document.querySelector('.hero');
-  if(!hero) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = window.innerWidth;
+  const h = window.innerHeight;
   
-  const rect = hero.getBoundingClientRect();
-  const cx = rect.width / 2;
-  const cy = rect.height / 2;
+  teamoCanvas.width = Math.floor(w * dpr);
+  teamoCanvas.height = Math.floor(h * dpr);
+  teamoCanvas.style.width = w + 'px';
+  teamoCanvas.style.height = h + 'px';
+  teamoCtx.setTransform(dpr,0,0,dpr,0,0);
+
+  teamoParticles = [];
+  const cx = w / 2;
+  const cy = h / 2;
 
   // Create heart shape outline
   const heartPoints = [];
-  const steps = 200;
+  const steps = 250;
   for(let i=0; i<steps; i++){
     const t = (i / steps) * Math.PI * 2;
     const x = 16 * Math.pow(Math.sin(t), 3);
     const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-    heartPoints.push({x: cx + x * 8, y: cy + y * 8});
+    heartPoints.push({x: cx + x * 10, y: cy + y * 10});
   }
 
   // Create "TE AMO" text particles
-  const textScale = 2.2;
+  const textScale = Math.min(2.5, w / 300);
   const text = 'TE AMO';
-  const spacing = 55 * textScale;
+  const spacing = 60 * textScale;
   const startX = cx - (text.length * spacing) / 2 + spacing/2;
   
   // Letter patterns (simplified pixel art)
@@ -113,24 +109,27 @@ function initTeAmo(){
     ' ': []
   };
 
+  // Spawn particles from random positions (they'll fly to form letters)
   for(let i=0; i<text.length; i++){
     const letter = letters[text[i]];
     if(!letter) continue;
     const lx = startX + i * spacing;
     for(let p of letter){
-      for(let dx=0; dx<4; dx++){
-        for(let dy=0; dy<4; dy++){
+      for(let dx=0; dx<5; dx++){
+        for(let dy=0; dy<5; dy++){
           teamoParticles.push({
-            x: lx + p[0] * 9 * textScale + dx * 2,
-            y: cy + p[1] * 9 * textScale + dy * 2,
-            tx: lx + p[0] * 9 * textScale + dx * 2,
-            ty: cy + p[1] * 9 * textScale + dy * 2,
-            vx: rand(-2, 2),
-            vy: rand(-2, 2),
-            size: rand(2, 3.5),
+            x: rand(0, w),
+            y: rand(0, h),
+            tx: lx + p[0] * 10 * textScale + dx * 2.2,
+            ty: cy + p[1] * 10 * textScale + dy * 2.2,
+            vx: 0,
+            vy: 0,
+            size: rand(2.5, 4),
             hue: rand(340, 360),
-            alpha: rand(0.7, 1),
-            phase: rand(0, Math.PI * 2)
+            alpha: 0,
+            targetAlpha: rand(0.8, 1),
+            phase: rand(0, Math.PI * 2),
+            delay: rand(0, 0.5)
           });
         }
       }
@@ -139,20 +138,80 @@ function initTeAmo(){
 
   // Add heart outline particles
   for(let pt of heartPoints){
-    if(Math.random() < 0.3){
+    if(Math.random() < 0.4){
       teamoParticles.push({
-        x: pt.x,
-        y: pt.y,
+        x: rand(0, w),
+        y: rand(0, h),
         tx: pt.x,
         ty: pt.y,
-        vx: rand(-1, 1),
-        vy: rand(-1, 1),
-        size: rand(2, 4),
+        vx: 0,
+        vy: 0,
+        size: rand(2.5, 4.5),
         hue: rand(340, 10),
-        alpha: rand(0.5, 0.9),
-        phase: rand(0, Math.PI * 2)
+        alpha: 0,
+        targetAlpha: rand(0.6, 0.95),
+        phase: rand(0, Math.PI * 2),
+        delay: rand(0, 0.8)
       });
     }
+  }
+
+  teamoAnimating = true;
+}
+
+function animateTeAmo(dt){
+  if(!teamoAnimating) return;
+
+  const w = teamoCanvas.width / (Math.min(2, window.devicePixelRatio || 1));
+  const h = teamoCanvas.height / (Math.min(2, window.devicePixelRatio || 1));
+  
+  teamoCtx.fillStyle = 'rgba(7,7,11,0.15)';
+  teamoCtx.fillRect(0, 0, w, h);
+
+  let allSettled = true;
+
+  for(let p of teamoParticles){
+    if(p.delay > 0){
+      p.delay -= dt;
+      allSettled = false;
+      continue;
+    }
+
+    p.phase += dt * 2;
+    const wobble = Math.sin(p.phase) * 1.2;
+    
+    // Attract to target with spring physics
+    const dx = p.tx - p.x;
+    const dy = p.ty - p.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    
+    if(dist > 2){
+      allSettled = false;
+      p.vx += dx * 0.08;
+      p.vy += dy * 0.08;
+    }
+    
+    p.vx *= 0.92;
+    p.vy *= 0.92;
+    
+    p.x += p.vx * dt * 60;
+    p.y += p.vy * dt * 60;
+
+    // Fade in
+    if(p.alpha < p.targetAlpha){
+      p.alpha += dt * 1.5;
+    }
+
+    const finalX = p.x + wobble;
+    const finalY = p.y + wobble;
+
+    // Draw with glow
+    teamoCtx.shadowBlur = 12;
+    teamoCtx.shadowColor = `hsla(${p.hue}, 100%, 65%, ${p.alpha * 0.8})`;
+    teamoCtx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.alpha})`;
+    teamoCtx.beginPath();
+    teamoCtx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
+    teamoCtx.fill();
   }
 }
 
@@ -197,39 +256,9 @@ function tick(now){
     }
   }
 
-  // TE AMO particles
-  if(teamoParticles.length > 0){
-    const hero = document.querySelector('.hero');
-    if(hero){
-      const rect = hero.getBoundingClientRect();
-      teamoCtx.clearRect(0, 0, rect.width, rect.height);
-
-      for(let p of teamoParticles){
-        p.phase += dt * 2;
-        const wobble = Math.sin(p.phase) * 1.5;
-        
-        // Attract to target
-        const dx = p.tx - p.x;
-        const dy = p.ty - p.y;
-        p.vx += dx * 0.02;
-        p.vy += dy * 0.02;
-        p.vx *= 0.95;
-        p.vy *= 0.95;
-        
-        p.x += p.vx * dt * 30;
-        p.y += p.vy * dt * 30;
-
-        const finalX = p.x + wobble;
-        const finalY = p.y + wobble;
-
-        teamoCtx.beginPath();
-        teamoCtx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
-        teamoCtx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.alpha})`;
-        teamoCtx.shadowBlur = 8;
-        teamoCtx.shadowColor = `hsla(${p.hue}, 100%, 60%, 0.8)`;
-        teamoCtx.fill();
-      }
-    }
+  // TE AMO animation
+  if(teamoAnimating){
+    animateTeAmo(dt);
   }
 
   requestAnimationFrame(tick);
@@ -247,18 +276,35 @@ function closeModal(){
   modal.setAttribute('aria-hidden','true');
 }
 
+function openTeAmoModal(){
+  teamoModal.classList.add('is-open');
+  teamoModal.setAttribute('aria-hidden','false');
+  initTeAmo();
+  spawnHeart(window.innerWidth*0.5, window.innerHeight*0.5, true);
+}
+
+function closeTeAmoModal(){
+  teamoModal.classList.remove('is-open');
+  teamoModal.setAttribute('aria-hidden','true');
+  teamoAnimating = false;
+  teamoParticles = [];
+}
+
 btnOpen.addEventListener('click', openModal);
-btnSurprise.addEventListener('click', () => {
-  toastMsg('✨ Sorpresa: cada latido mío te dice “te amo”.');
-  spawnHeart(window.innerWidth*0.5, window.innerHeight*0.55, true);
-});
+btnSurprise.addEventListener('click', openTeAmoModal);
+
+document.getElementById('teamo-close').addEventListener('click', closeTeAmoModal);
+document.getElementById('teamo-close-btn').addEventListener('click', closeTeAmoModal);
 
 modal.addEventListener('click', (e) => {
   if(e.target.matches('[data-close]')) closeModal();
 });
 
 document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape') closeModal();
+  if(e.key === 'Escape'){
+    closeModal();
+    closeTeAmoModal();
+  }
 });
 
 document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
@@ -295,7 +341,7 @@ btnNo.addEventListener('click', () => {
 });
 
 window.addEventListener('pointerdown', (e) => {
-  if(modal.classList.contains('is-open')) return;
+  if(modal.classList.contains('is-open') || teamoModal.classList.contains('is-open')) return;
   spawnHeart(e.clientX, e.clientY, true);
 });
 

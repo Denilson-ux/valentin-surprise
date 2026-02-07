@@ -25,9 +25,6 @@
   <!-- Heart particles canvas -->
   <canvas id="hearts" aria-hidden="true"></canvas>
 
-  <!-- TE AMO particles canvas -->
-  <canvas id="teamo" aria-hidden="true"></canvas>
-
   <!-- Main UI -->
   <main class="wrap">
     <header class="top">
@@ -43,10 +40,6 @@
     </header>
 
     <section class="hero" aria-label="Tarjeta principal">
-      <div class="hero__teamo" id="teamo-container" aria-hidden="true">
-        <!-- Canvas will render TE AMO here -->
-      </div>
-
       <p class="kicker">San Valentín 2026 • Un detalle de</p>
       <h1 class="title">Mi princesita, mi amor, mi todo</h1>
       <p class="subtitle">
@@ -59,7 +52,7 @@
           ❤️ Abrir mi carta
         </button>
         <button id="btn-surprise" class="btn btn--ghost" type="button">
-          ✨ Ver sorpresa
+          ✨ Ver sorpresa especial
         </button>
       </div>
 
@@ -204,6 +197,13 @@
           <span class="sig">Tu enamorado que te admira cada día</span>
         </p>
       </article>
+    </section>
+
+    <!-- TE AMO Modal -->
+    <section id="teamo-modal" class="teamo-modal" aria-hidden="true" aria-label="Sorpresa TE AMO">
+      <div class="teamo-modal__backdrop" id="teamo-close"></div>
+      <canvas id="teamo" class="teamo-canvas"></canvas>
+      <button class="teamo-modal__close" id="teamo-close-btn" type="button" aria-label="Cerrar">×</button>
     </section>
 
     <!-- Final toast -->
