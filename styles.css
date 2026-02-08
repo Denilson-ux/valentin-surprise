@@ -754,7 +754,7 @@ img{
   box-shadow:0 24px 80px rgba(0,0,0,.75);
 }
 
-/* Foto con marco de corazón mejorado en sorpresa */
+/* Marco de CORAZÓN perfecto en sorpresa */
 .surprise-photo{
   display:flex;
   justify-content:center;
@@ -765,8 +765,8 @@ img{
 .heart-frame{
   position:relative;
   width:min(280px, 75vw);
-  aspect-ratio:3 / 4;
-  padding:10px;
+  aspect-ratio:1 / 1;
+  padding:12px;
   background:
     linear-gradient(135deg, 
       rgba(255,255,255,0.95) 0%, 
@@ -775,14 +775,7 @@ img{
       rgba(255,45,85,0.85) 75%,
       rgba(217,30,69,0.9) 100%
     );
-  clip-path:polygon(
-    50% 0%,
-    61% 7%, 68% 15%, 73% 25%, 75% 35%,
-    74% 45%, 70% 55%, 64% 65%, 56% 75%,
-    50% 82%,
-    44% 75%, 36% 65%, 30% 55%, 26% 45%,
-    25% 35%, 27% 25%, 32% 15%, 39% 7%
-  );
+  clip-path: path('M 50,15 C 50,12 47,8 42,8 C 37,8 33,12 33,17 C 33,12 29,8 24,8 C 19,8 16,12 16,15 C 16,22 23,29 33,40 L 33,85 L 50,100 L 67,85 L 67,40 C 77,29 84,22 84,15 C 84,12 81,8 76,8 C 71,8 67,12 67,17 C 67,12 63,8 58,8 C 53,8 50,12 50,15 Z');
   display:flex;
   align-items:center;
   justify-content:center;
@@ -793,16 +786,9 @@ img{
 .heart-frame:before{
   content:"";
   position:absolute;
-  inset:8px;
-  background:linear-gradient(180deg, rgba(255,255,255,.25) 0%, transparent 100%);
-  clip-path:polygon(
-    50% 2%,
-    60% 8%, 67% 16%, 72% 26%, 73% 36%,
-    72% 46%, 68% 56%, 62% 66%, 55% 74%,
-    50% 80%,
-    45% 74%, 38% 66%, 32% 56%, 28% 46%,
-    27% 36%, 28% 26%, 33% 16%, 40% 8%
-  );
+  inset:10px;
+  background:linear-gradient(180deg, rgba(255,255,255,.3) 0%, transparent 100%);
+  clip-path: path('M 50,18 C 50,15 47,11 42,11 C 38,11 35,14 35,18 C 35,14 32,11 28,11 C 24,11 21,15 21,18 C 21,24 27,30 35,40 L 35,80 L 50,93 L 65,80 L 65,40 C 73,30 79,24 79,18 C 79,15 76,11 72,11 C 68,11 65,14 65,18 C 65,14 62,11 58,11 C 54,11 50,15 50,18 Z');
   pointer-events:none;
 }
 
@@ -812,26 +798,19 @@ img{
   inset:-3px;
   background:inherit;
   clip-path:inherit;
-  filter:blur(8px);
-  opacity:.5;
+  filter:blur(10px);
+  opacity:.6;
   z-index:-1;
 }
 
 .heart-frame img{
-  width:calc(100% - 16px);
-  height:calc(100% - 16px);
+  width:calc(100% - 20px);
+  height:calc(100% - 20px);
   object-fit:cover;
-  border-radius:20px;
+  border-radius:8px;
   position:relative;
   z-index:1;
-  clip-path:polygon(
-    50% 1%,
-    60% 8%, 67% 16%, 71% 26%, 72% 36%,
-    71% 46%, 67% 56%, 61% 66%, 54% 74%,
-    50% 79%,
-    46% 74%, 39% 66%, 33% 56%, 29% 46%,
-    28% 36%, 29% 26%, 33% 16%, 40% 8%
-  );
+  clip-path: path('M 50,18 C 50,15 47,11 42,11 C 38,11 35,14 35,18 C 35,14 32,11 28,11 C 24,11 21,15 21,18 C 21,24 27,30 35,40 L 35,80 L 50,93 L 65,80 L 65,40 C 73,30 79,24 79,18 C 79,15 76,11 72,11 C 68,11 65,14 65,18 C 65,14 62,11 58,11 C 54,11 50,15 50,18 Z');
 }
 
 /* Heart glow animation mejorada */
@@ -847,7 +826,7 @@ img{
       drop-shadow(0 12px 32px rgba(255,45,85,.65))
       drop-shadow(0 0 20px rgba(255,45,85,.55))
       drop-shadow(0 0 40px rgba(255,107,138,.35));
-    transform:scale(1.02);
+    transform:scale(1.03);
   }
 }
 
@@ -874,7 +853,7 @@ img{
 
   .heart-frame{
     width:min(240px, 80vw);
-    padding:8px;
+    padding:10px;
   }
 
   .kawaii-cats{
