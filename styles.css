@@ -368,6 +368,7 @@ body{
   z-index:10;
   display:none;
   background: rgba(7,7,11,0.97);
+  overflow-y:auto;
 }
 .surprise-modal.is-open{display:flex; align-items:center; justify-content:center}
 .surprise-modal__backdrop{
@@ -385,6 +386,7 @@ body{
   z-index:2;
   text-align:center;
   max-width:900px;
+  width:100%;
   padding:40px 20px;
   animation: fadeInScale 0.6s ease-out;
 }
@@ -410,23 +412,24 @@ body{
 
 .surprise-title{
   font-family: 'Pacifico', cursive;
-  font-size: clamp(48px, 8vw, 86px);
+  font-size: clamp(36px, 8vw, 86px);
   color: transparent;
   background: linear-gradient(135deg, #ff2d55 0%, #ff6b8a 50%, #ff4d6d 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  margin:0 0 16px;
+  margin:0 0 12px;
   text-shadow: 0 8px 32px rgba(255,45,85,.45);
   animation: glowPulse 3s ease-in-out infinite;
 }
 
 .surprise-subtitle{
-  font-size:18px;
+  font-size:clamp(14px, 3vw, 18px);
   color:var(--muted);
-  margin:0 0 50px;
+  margin:0 0 28px;
   max-width:70ch;
   margin-left:auto;
   margin-right:auto;
+  padding:0 10px;
 }
 
 /* Kawaii Cats */
@@ -434,8 +437,8 @@ body{
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  gap:clamp(30px, 5vw, 80px);
-  margin:0 0 40px;
+  gap:clamp(20px, 5vw, 80px);
+  margin:0 0 20px;
   flex-wrap:wrap;
 }
 
@@ -449,23 +452,23 @@ body{
 
 .k-head{
   position:relative;
-  width:140px;
-  height:140px;
+  width:clamp(100px, 20vw, 140px);
+  height:clamp(100px, 20vw, 140px);
   background: linear-gradient(180deg, #e8f4ff 0%, #d4e8f7 100%);
   border-radius:50% 50% 45% 45%;
   border:3px solid rgba(255,255,255,.3);
   box-shadow: 0 20px 60px rgba(0,0,0,.3);
 }
 .k-head-small{
-  width:100px;
-  height:100px;
+  width:clamp(70px, 15vw, 100px);
+  height:clamp(70px, 15vw, 100px);
 }
 
 .k-ear{
   position:absolute;
   top:-15px;
-  width:35px;
-  height:50px;
+  width:clamp(25px, 5vw, 35px);
+  height:clamp(35px, 7vw, 50px);
   background: linear-gradient(135deg, #e8f4ff 0%, #c5dff0 100%);
   border:3px solid rgba(255,255,255,.3);
   border-radius:50% 50% 20% 20%;
@@ -483,9 +486,9 @@ body{
 .k-ribbon{
   position:absolute;
   top:-5px;
-  right:25px;
-  width:28px;
-  height:28px;
+  right:clamp(15px, 4vw, 25px);
+  width:clamp(20px, 4vw, 28px);
+  height:clamp(20px, 4vw, 28px);
   background: linear-gradient(135deg, #ff2d55 0%, #ff4d6d 100%);
   border-radius:50%;
   box-shadow: 0 4px 12px rgba(255,45,85,.4);
@@ -496,8 +499,8 @@ body{
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  width:12px;
-  height:12px;
+  width:clamp(8px, 2vw, 12px);
+  height:clamp(8px, 2vw, 12px);
   background:#fff;
   border-radius:50%;
 }
@@ -513,14 +516,14 @@ body{
 
 .k-eye{
   position:absolute;
-  top:45px;
-  width:12px;
-  height:18px;
+  top:clamp(32px, 45%, 45px);
+  width:clamp(10px, 2vw, 12px);
+  height:clamp(14px, 3vw, 18px);
   background:#2d2d3a;
   border-radius:50%;
 }
-.k-eye-l{left:35px}
-.k-eye-r{right:35px}
+.k-eye-l{left:clamp(25px, 25%, 35px)}
+.k-eye-r{right:clamp(25px, 25%, 35px)}
 .k-eye:after{
   content:"";
   position:absolute;
@@ -531,23 +534,23 @@ body{
   background:#fff;
   border-radius:50%;
 }
-.k-head-small .k-eye-l{left:25px}
-.k-head-small .k-eye-r{right:25px}
+.k-head-small .k-eye-l{left:clamp(18px, 25%, 25px)}
+.k-head-small .k-eye-r{right:clamp(18px, 25%, 25px)}
 
 .k-blush{
   position:absolute;
-  top:60px;
-  width:22px;
-  height:12px;
+  top:clamp(42px, 60%, 60px);
+  width:clamp(18px, 3vw, 22px);
+  height:clamp(10px, 2vw, 12px);
   background: linear-gradient(135deg, rgba(255,140,160,.5), rgba(255,140,160,.3));
   border-radius:50%;
 }
-.k-blush-l{left:18px}
-.k-blush-r{right:18px}
+.k-blush-l{left:clamp(12px, 13%, 18px)}
+.k-blush-r{right:clamp(12px, 13%, 18px)}
 
 .k-mouth{
   position:absolute;
-  top:75px;
+  top:clamp(53px, 75%, 75px);
   left:50%;
   transform:translateX(-50%);
   width:8px;
@@ -557,8 +560,8 @@ body{
   border-radius:0 0 50% 50%;
 }
 .k-mouth-happy{
-  width:30px;
-  height:15px;
+  width:clamp(22px, 4vw, 30px);
+  height:clamp(12px, 2.5vw, 15px);
   border:3px solid #2d2d3a;
   border-top:none;
   border-radius:0 0 50% 50%;
@@ -566,8 +569,8 @@ body{
 
 .k-body{
   margin-top:-10px;
-  width:140px;
-  height:80px;
+  width:clamp(100px, 20vw, 140px);
+  height:clamp(60px, 12vw, 80px);
   background: linear-gradient(180deg, #e8f4ff 0%, #d4e8f7 100%);
   border:3px solid rgba(255,255,255,.3);
   border-radius:50% 50% 50% 50%;
@@ -583,13 +586,13 @@ body{
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
-  font-size:28px;
+  font-size:clamp(20px, 4vw, 28px);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .k-text{
   margin-top:8px;
-  font-size:32px;
+  font-size:clamp(24px, 5vw, 32px);
   font-weight:700;
   color:#2d2d3a;
   text-shadow: 0 4px 12px rgba(255,45,85,.3);
@@ -605,10 +608,11 @@ body{
 }
 
 .surprise-message{
-  font-size:20px;
+  font-size:clamp(16px, 3.5vw, 20px);
   font-weight:600;
   color:var(--muted);
   margin:0;
+  padding:0 10px;
   animation: fadeIn 1s ease-out 0.5s both;
 }
 
@@ -750,22 +754,27 @@ img{
   box-shadow:0 24px 80px rgba(0,0,0,.75);
 }
 
-/* Foto con marco de corazón en sorpresa */
+/* Foto con marco de corazón mejorado en sorpresa */
 .surprise-photo{
   display:flex;
   justify-content:center;
-  margin:0 auto 26px;
+  margin:0 auto 24px;
   padding:0 12px;
 }
 
 .heart-frame{
   position:relative;
-  width:min(260px, 70vw);
+  width:min(280px, 75vw);
   aspect-ratio:3 / 4;
-  padding:6px;
+  padding:10px;
   background:
-    radial-gradient(circle at 30% 0%, #ffffff 0%, #ff9fbf 35%, transparent 60%),
-    radial-gradient(circle at 70% 100%, #ff2d55 0%, #7b102b 60%);
+    linear-gradient(135deg, 
+      rgba(255,255,255,0.95) 0%, 
+      rgba(255,175,195,0.85) 25%,
+      rgba(255,107,138,0.9) 50%,
+      rgba(255,45,85,0.85) 75%,
+      rgba(217,30,69,0.9) 100%
+    );
   clip-path:polygon(
     50% 0%,
     61% 7%, 68% 15%, 73% 25%, 75% 35%,
@@ -774,45 +783,134 @@ img{
     44% 75%, 36% 65%, 30% 55%, 26% 45%,
     25% 35%, 27% 25%, 32% 15%, 39% 7%
   );
-  box-shadow:0 24px 80px rgba(0,0,0,.7);
   display:flex;
   align-items:center;
   justify-content:center;
   animation: heartGlow 3s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px rgba(255,45,85,.45));
+}
+
+.heart-frame:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  background:linear-gradient(180deg, rgba(255,255,255,.25) 0%, transparent 100%);
+  clip-path:polygon(
+    50% 2%,
+    60% 8%, 67% 16%, 72% 26%, 73% 36%,
+    72% 46%, 68% 56%, 62% 66%, 55% 74%,
+    50% 80%,
+    45% 74%, 38% 66%, 32% 56%, 28% 46%,
+    27% 36%, 28% 26%, 33% 16%, 40% 8%
+  );
+  pointer-events:none;
+}
+
+.heart-frame:after{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  background:inherit;
+  clip-path:inherit;
+  filter:blur(8px);
+  opacity:.5;
+  z-index:-1;
 }
 
 .heart-frame img{
-  width:100%;
-  height:100%;
+  width:calc(100% - 16px);
+  height:calc(100% - 16px);
   object-fit:cover;
-  border-radius:18px;
+  border-radius:20px;
+  position:relative;
+  z-index:1;
+  clip-path:polygon(
+    50% 1%,
+    60% 8%, 67% 16%, 71% 26%, 72% 36%,
+    71% 46%, 67% 56%, 61% 66%, 54% 74%,
+    50% 79%,
+    46% 74%, 39% 66%, 33% 56%, 29% 46%,
+    28% 36%, 29% 26%, 33% 16%, 40% 8%
+  );
 }
 
-/* Responsive tweaks for very small phones */
+/* Heart glow animation mejorada */
+@keyframes heartGlow{
+  0%,100%{
+    filter:
+      drop-shadow(0 8px 24px rgba(255,45,85,.45))
+      drop-shadow(0 0 12px rgba(255,45,85,.35));
+    transform:scale(1);
+  }
+  50%{
+    filter:
+      drop-shadow(0 12px 32px rgba(255,45,85,.65))
+      drop-shadow(0 0 20px rgba(255,45,85,.55))
+      drop-shadow(0 0 40px rgba(255,107,138,.35));
+    transform:scale(1.02);
+  }
+}
+
+/* Responsive optimizado para móviles */
 @media (max-width: 480px){
+  .surprise-content{
+    padding:20px 12px;
+    max-height:100vh;
+    overflow-y:auto;
+  }
+
+  .surprise-title{
+    margin-bottom:8px;
+  }
+
+  .surprise-subtitle{
+    margin-bottom:20px;
+    font-size:14px;
+  }
+
+  .surprise-photo{
+    margin-bottom:18px;
+  }
+
+  .heart-frame{
+    width:min(240px, 80vw);
+    padding:8px;
+  }
+
+  .kawaii-cats{
+    gap:15px;
+    margin-bottom:16px;
+  }
+
+  .surprise-message{
+    font-size:15px;
+  }
+
   .polaroid{
     max-width:220px;
     transform:rotate(0deg);
   }
 
-  .surprise-content{
-    padding:32px 14px;
+  .surprise-modal__close{
+    width:40px;
+    height:40px;
+    top:10px;
+    right:10px;
+    font-size:24px;
   }
 }
 
-/* Heart glow animation */
-@keyframes heartGlow{
-  0%,100%{
-    box-shadow:
-      0 20px 70px rgba(0,0,0,.65),
-      0 0 18px rgba(255,45,85,.65),
-      0 0 32px rgba(255,77,109,.55);
+@media (max-width: 390px){
+  .surprise-content{
+    padding:16px 10px;
   }
-  50%{
-    box-shadow:
-      0 24px 90px rgba(0,0,0,.75),
-      0 0 26px rgba(255,45,85,.9),
-      0 0 50px rgba(255,77,109,.75);
+
+  .heart-frame{
+    width:min(200px, 85vw);
+  }
+
+  .kawaii-cats{
+    gap:12px;
   }
 }
 
